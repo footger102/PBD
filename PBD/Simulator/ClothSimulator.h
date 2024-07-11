@@ -39,10 +39,10 @@ private:
 	vector<CCD_Object>			CCD_colliders;
 
 	// Geometry
-	unsigned int				nV;
-	unsigned int				nE;
-	unsigned int				nT;
-	unsigned int				nB;
+	unsigned int				nV; //number of vertices
+	unsigned int				nE; //number of edges
+	unsigned int				nT; //number of triangles
+	unsigned int				nB; //number of triangles pairs
 
 	vector<Vector3i>			triangles;
 	vector<Vector2i>			edges;

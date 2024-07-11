@@ -56,7 +56,7 @@ void ClothSimulator::drawMesh() {
 
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < nT; i++) {
-		//glColor3f(1, 0, 0);
+		//glColor3f(0, 1, 0);
 		glVertex3f(pos[triangles[i][0]][0], pos[triangles[i][0]][1], pos[triangles[i][0]][2]);
 		glVertex3f(pos[triangles[i][1]][0], pos[triangles[i][1]][1], pos[triangles[i][1]][2]);
 		glVertex3f(pos[triangles[i][2]][0], pos[triangles[i][2]][1], pos[triangles[i][2]][2]);
@@ -72,7 +72,7 @@ void ClothSimulator::drawVertices() {
 	glDisable(GL_LIGHTING);
 
 	// vertices
-	glPointSize(8.0);
+	glPointSize(4.0);
 	glBegin(GL_POINTS);
 	glColor3f(1, 0.3, 0.3);
 	for (int i = 0; i < nV; i++)
@@ -80,7 +80,7 @@ void ClothSimulator::drawVertices() {
 	glEnd();
 
 	// edges
-	glLineWidth(4.0);
+	glLineWidth(2.0);
 	glBegin(GL_LINES);
 	glColor3f(0.5, 0, 0);
 	for (int i = 0; i < nE; i++) {
@@ -100,12 +100,19 @@ void ClothSimulator::drawBVH() {
 			col.visualizeBVH(3);
 }
 
-void ClothSimulator::initPBD() {
-	
+void ClothSimulator::initPBD() {	
+	for (int i = 0; i < nV; i++) { //initialize velocity
+		vel[i][0] = 0.0; vel[i][1] = 20.0; vel[i][2] = 0.0;
+	}
 }
 
 void ClothSimulator::updatePBD() {
-	
+	Parameter& param = Parameter::getInstance(); //parameter instance 积己
+
+	for (int i = 0; i < nV; i++) { //舅绊府硫 Line (5), (7) 利侩
+		vel[i][1] += param.getTimestep() * param.getGravity();
+		pred_pos[i] += vel[i] * param.getTimestep();
+	}
 }
 
 void ClothSimulator::initRestAngles() {

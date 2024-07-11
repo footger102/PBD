@@ -3,7 +3,7 @@ using namespace std;
 
 #include "Parameter.h"
 
-Parameter* Parameter::instance = NULL;
+Parameter* Parameter::instance = NULL; //╫л╠шео фпео
 
 Parameter::Parameter() {
 	initParameters();

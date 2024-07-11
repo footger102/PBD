@@ -36,7 +36,7 @@ void renderScene() {
 	light.glRender();
 
 	clothSim.drawMesh();
-	//clothSim.drawVertices();
+	clothSim.drawVertices();
 
 	glutSwapBuffers();
 }
