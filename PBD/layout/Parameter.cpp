@@ -23,7 +23,7 @@ Parameter& Parameter::getInstance() {
 void Parameter::initParameters() {
 	timeStep = 0.01;
 	mass = 0.00001;
-	gravity = -980;
+	gravity = -98.0; //980에서 98.0으로 수정
 	stretch = 1;
 	bending = 1;
 	iteration = 20;

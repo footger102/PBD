@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <algorithm>
 
 #include "TriangularMesh.h"
 #include "../layout/Parameter.h"
@@ -48,6 +49,7 @@ private:
 	vector<Vector2i>			edges;
 	vector<Vector3i>			trianglesEdges;
 	vector<int>					bendingElementIdx;
+	vector<int>					connectedVertexIdx;
 
 	vector<Vector2d>			restPos;
 	vector<Vector3i>			restTri;

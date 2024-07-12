@@ -101,18 +101,45 @@ void ClothSimulator::drawBVH() {
 }
 
 void ClothSimulator::initPBD() {	
-	for (int i = 0; i < nV; i++) { //initialize velocity
-		vel[i][0] = 0.0; vel[i][1] = 20.0; vel[i][2] = 0.0;
+	//initialize mass, inverse mass
+	for (int i = 0; i < nV; i++) {
+		mass[i] = Parameter::getInstance().getMass();
+		inv_mass[i] = 1 / mass[i];
 	}
+
+	// initialize vertex constraint (center, diagonal)
+	inv_mass[527] = 0; 
+	inv_mass[6] = 0;
+	inv_mass[166] = 0;
+
 }
 
 void ClothSimulator::updatePBD() {
-	Parameter& param = Parameter::getInstance(); //parameter instance 생성
+	Parameter& param = Parameter::getInstance(); //parameter instance 생성, 이렇게 쓰는 거 맞냐?
 
 	for (int i = 0; i < nV; i++) { //알고리즘 Line (5), (7) 적용
-		vel[i][1] += param.getTimestep() * param.getGravity();
+		vel[i][1] += param.getTimestep() * inv_mass[i] * mass[i] * param.getGravity();
 		pred_pos[i] += vel[i] * param.getTimestep();
+		//pos[i] += vel[i] * param.getTimestep(); //for test
+
+		//project Constraint
+		
+		for (int j = 0; j < Parameter::getInstance().getIteration(); j++) {//loop solverIteration times
+			
+			for (int k = 0; k < nE; k++) {//forall edges connected to ith vertex
+				if (edges[k][0] == i) connectedVertexIdx.push_back(edges[k][1]); //find vertex index connected to ith vertex
+			}
+
+			std::sort(connectedVertexIdx.begin(), connectedVertexIdx.end());
+			connectedVertexIdx.erase(std::unique(connectedVertexIdx.begin(), connectedVertexIdx.end()), connectedVertexIdx.end()); //중복 원소 제거
+		}
+
+		connectedVertexIdx.clear();
+		connectedVertexIdx.shrink_to_fit(); //initialize connected vertex index of ith vertex
+		
 	}
+
+	//distance constraint projection 해야됨
 }
 
 void ClothSimulator::initRestAngles() {
